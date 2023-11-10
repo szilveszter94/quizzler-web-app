@@ -27,12 +27,15 @@ const HomePage = () => {
               </p>
               <div className="play-button-container mb-5">
                 <Link to="/initrandomgame">
-                  <PlayButton color="primary" >{currentUser ? "Play" : "Practice"}</PlayButton>
+                  <PlayButton color="primary">
+                    {currentUser ? "Play" : "Practice"}
+                  </PlayButton>
                 </Link>
               </div>
               <p className="home-page-subtitle">
-                If you want to create quizzes and more, you can register for an
-                account.
+                {currentUser
+                  ? "Let's play!"
+                  : "If you want to create quizzes and more, you can register for an account."}
               </p>
             </div>
           </div>
