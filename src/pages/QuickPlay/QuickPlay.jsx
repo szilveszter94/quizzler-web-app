@@ -25,14 +25,12 @@ const QuickPlay = () => {
   const [percentage, setPercentage] = useState(false);
   const { currentUser } = useContext(UserContext);
   const [gameType, setGameType] = useState("");
-  const [gameMode, setGameMode] = useState("")
+  const [gameMode, setGameMode] = useState("");
   const [onSave, setOnSave] = useState(false);
   const [title, setTitle] = useState("");
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search)
+  const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
-
-
 
   //timer countdown
   useEffect(() => {
@@ -49,8 +47,13 @@ const QuickPlay = () => {
       } else {
         clearInterval(timer);
         if (!isAnswerSelected) {
-          const currentDifficulty = actualQuiz[currentQuestionIndex].difficulty
-          const rankPoints = currentDifficulty === "hard" ? 8 : currentDifficulty === "medium" ? 5 : 1
+          const currentDifficulty = actualQuiz[currentQuestionIndex].difficulty;
+          const rankPoints =
+            currentDifficulty === "hard"
+              ? 8
+              : currentDifficulty === "medium"
+              ? 5
+              : 1;
           if (currentUser && gameMode === "ranked") {
             await editUserProfile(currentUser, "false_answers", rankPoints);
           }
@@ -66,7 +69,7 @@ const QuickPlay = () => {
 
   useEffect(() => {
     const increaseQuizzesPlayed = async () => {
-      const currentGameMode = searchParams.get("gamemode")
+      const currentGameMode = searchParams.get("gamemode");
       if (currentUser && currentGameMode === "ranked") {
         await editUserProfile(currentUser, "quizzes_played");
       }
@@ -112,11 +115,11 @@ const QuickPlay = () => {
     } else {
       alert(response.message);
     }
-  }
+  };
 
   const showForm = () => {
     setOnSave(true);
-  }
+  };
 
   // Answers conditions if correct or not/////scoring/////reset timer every next question
   const handleAnswerClick = async (answer) => {
@@ -125,17 +128,27 @@ const QuickPlay = () => {
     );
     const correct = answer === actualQuiz[currentQuestionIndex].correct_answer;
     const currentScore = correct ? score + 1 : score;
-    const currentDifficulty = actualQuiz[currentQuestionIndex].difficulty
+    const currentDifficulty = actualQuiz[currentQuestionIndex].difficulty;
 
     if (correct) {
       setScore(currentScore);
       if (currentUser && gameMode === "ranked") {
-      const rankPoints = currentDifficulty === "hard" ? 10 : currentDifficulty === "medium" ? 7 : 3
-        await editUserProfile(currentUser, "good_answers", rankPoints);  
+        const rankPoints =
+          currentDifficulty === "hard"
+            ? 10
+            : currentDifficulty === "medium"
+            ? 7
+            : 3;
+        await editUserProfile(currentUser, "good_answers", rankPoints);
       }
     } else {
       if (currentUser && gameMode === "ranked") {
-        const rankPoints = currentDifficulty === "hard" ? 8 : currentDifficulty === "medium" ? 5 : 1
+        const rankPoints =
+          currentDifficulty === "hard"
+            ? 8
+            : currentDifficulty === "medium"
+            ? 5
+            : 1;
         await editUserProfile(currentUser, "false_answers", rankPoints);
       }
     }
@@ -152,7 +165,6 @@ const QuickPlay = () => {
       if (currentUser && gameMode === "ranked") {
         await editUserProfile(currentUser, "quizzes_completed");
       }
-
     }
   };
 
@@ -195,10 +207,10 @@ const QuickPlay = () => {
                     percentage === false
                       ? ""
                       : percentage < 40
-                        ? "text-danger"
-                        : percentage < 80
-                          ? "text-warning"
-                          : "text-success"
+                      ? "text-danger"
+                      : percentage < 80
+                      ? "text-warning"
+                      : "text-success"
                   }
                 >
                   {isGameOver
@@ -209,26 +221,25 @@ const QuickPlay = () => {
               {actualQuiz.length > 0 ? (
                 <div className="question-container p-5">
                   <div className="question-text-container px-2 py-4">
-                    <h3>
-                      {actualQuiz[currentQuestionIndex].question}
-                    </h3>
+                    <h3>{actualQuiz[currentQuestionIndex].question}</h3>
                   </div>
                   <div className="answers py-3 row">
                     {shuffledAnswers.map((answer, index) => (
                       <div className="col-md-6" key={index}>
                         <h3
                           onClick={() => handleAnswerClick(answer)}
-                          className={`${isAnswerSelected || timeLeft === 0 ? "disabled" : ""
-                            } btn answer-button p-2 my-2 ${index % 2 === 0 ? "ms-5" : "me-5"
-                            } ${feedback === index ||
-                              (timeLeft === 0 &&
-                                answer ===
+                          className={`${
+                            isAnswerSelected || timeLeft === 0 ? "disabled" : ""
+                          } btn answer-button p-2 mt-3 mx-1 ${
+                            feedback === index ||
+                            (timeLeft === 0 &&
+                              answer ===
                                 actualQuiz[currentQuestionIndex].correct_answer)
                               ? "correct-answer"
                               : feedback === ""
-                                ? ""
-                                : "incorrect-answer"
-                            }`}
+                              ? ""
+                              : "incorrect-answer"
+                          }`}
                         >
                           <span>{`${questionCategories[index]}:`}</span>
                           <span style={{ flex: 1 }}>{answer}</span>
@@ -259,13 +270,43 @@ const QuickPlay = () => {
               </div>
               {isGameOver && gameType === "online" ? (
                 <div className="my-4 mx-4">
-                  {onSave ? "" : <h2 className="lead mt-1">Do you want to save this game?</h2>}
-                  {onSave ? <div className="row"><form onSubmit={(event) => saveOnlineQuiz(event)}>
-                    <label className="form-label lead" htmlFor="title">Quiz title</label>
-                    <input required value={title} onChange={(event) => setTitle(event.target.value)} className="form-control mb-3" type="text" name="title" id="title" />
-                    <button type="submit" className="btn btn-success mb-5">Save</button>
-                  </form></div> : ""}
-                  {onSave ? "" : <button onClick={showForm} className="btn btn-success mb-5">Yes</button>}
+                  {onSave ? (
+                    ""
+                  ) : (
+                    <h2 className="lead mt-1">
+                      Do you want to save this game?
+                    </h2>
+                  )}
+                  {onSave ? (
+                    <div className="row">
+                      <form onSubmit={(event) => saveOnlineQuiz(event)}>
+                        <label className="form-label lead" htmlFor="title">
+                          Quiz title
+                        </label>
+                        <input
+                          required
+                          value={title}
+                          onChange={(event) => setTitle(event.target.value)}
+                          className="form-control mb-3"
+                          type="text"
+                          name="title"
+                          id="title"
+                        />
+                        <button type="submit" className="btn btn-success mb-5">
+                          Save
+                        </button>
+                      </form>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  {onSave ? (
+                    ""
+                  ) : (
+                    <button onClick={showForm} className="btn btn-success mb-5">
+                      Yes
+                    </button>
+                  )}
                 </div>
               ) : (
                 ""
