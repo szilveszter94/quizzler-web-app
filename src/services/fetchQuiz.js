@@ -2,7 +2,7 @@ import { decodeBase64 } from "../utils/decodeBase64";
 
 export const fetchAllQuizFromDb = async (currentUser) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/v2/quiz?uid=${currentUser.uid}`);
+    const response = await fetch(`https://quiz-app-react-express-production-f12f.up.railway.app/api/v2/quiz?uid=${currentUser.uid}`);
     if (response.ok) {
       const quizData = await response.json();
       return quizData;
@@ -19,7 +19,7 @@ export const fetchAllQuizFromDb = async (currentUser) => {
 
 export const fethQuizById = async (id, encode, language) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/v2/quiz/${id}${encode ? "?encode=true" : ""}`);
+    const response = await fetch(`https://quiz-app-react-express-production-f12f.up.railway.app/api/v2/quiz/${id}${encode ? "?encode=true" : ""}`);
     if (response.ok) {
       const quizData = await response.json();
       if (encode) {
@@ -48,7 +48,7 @@ export const postQuiz = async (body, currentUser, newQuizTitle) => {
   }
   try {
     body.uid = currentUser.uid;
-    const response = await fetch("http://localhost:3000/api/v2/quiz", {
+    const response = await fetch("https://quiz-app-react-express-production-f12f.up.railway.app/api/v2/quiz", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export const postQuiz = async (body, currentUser, newQuizTitle) => {
 export const patchQuiz = async (body) => {
   const id = body._id;
   try {
-    const response = await fetch(`http://localhost:3000/api/v2/quiz/${id}`, {
+    const response = await fetch(`https://quiz-app-react-express-production-f12f.up.railway.app/api/v2/quiz/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export const patchQuiz = async (body) => {
 
 export const deleteQuiz = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/v2/quiz/${id}`, {
+    const response = await fetch(`https://quiz-app-react-express-production-f12f.up.railway.app/api/v2/quiz/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 export const translateText = async (quiz, language) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v2/quiz/translate?lan=${language}`,
+      `https://quiz-app-react-express-production-f12f.up.railway.app/api/v2/quiz/translate?lan=${language}`,
       {
         method: "POST",
         headers: {
