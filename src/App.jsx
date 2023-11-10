@@ -1,24 +1,69 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import HomePage from "./pages/HomePage/HomePage";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import QuizList from "./pages/QuizList/QuizList";
+import QuickPlay from "./pages/QuickPlay/QuickPlay";
+import QuizCreator from "./pages/QuizCreator/QuizCreator";
+import RandomGameCreator from "./pages/RandomGameCreator/RandomGameCreator";
+import About from "./pages/About/About";
+import Authentication from "./pages/Authentication/Authentication";
+import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
+import Forbidden from "./components/Forbidden/Forbidden";
+import Profile from "./pages/Profile/Profile";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
 
 function App() {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <p>Choo Choo! This is an example of a Vite + React app running on Railway.</p>
-      </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/quickplay" element={<QuickPlay />} />
+        <Route path="/initrandomgame" element={<RandomGameCreator />} />
+        <Route
+          path="/quizlist/:type"
+          element={
+            <ProtectedRoute>
+              <QuizList />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quiz/create/:id"
+          element={
+            <ProtectedRoute>
+              <QuizCreator />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/quiz/edit/:id"
+          element={
+            <ProtectedRoute>
+              <QuizCreator />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/about" element={<About />} />
+        <Route
+          path="/leaderboard"
+          element={
+            <ProtectedRoute>
+              <Leaderboard />
+            </ProtectedRoute>
+          }/>
+        <Route path="authentication" element={<Authentication />} />
+        <Route path="*" element={<Forbidden />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
