@@ -278,7 +278,7 @@ const QuickPlay = () => {
                   ""
                 )}
               </div>
-              {isGameOver && gameType === "online" ? (
+              {isGameOver && gameType === "online" && currentUser ? (
                 <div className="my-4 mx-4">
                   {onSave ? (
                     ""

@@ -9,6 +9,7 @@ import { fethQuizById } from "../../services/fetchQuiz";
 import Loading from "../../components/Loading/Loading";
 import { UserContext } from "../../contexts/userContext";
 import SnackBar from "../../components/SnackBar/SnackBar";
+import { useNavigate } from "react-router-dom";
 
 const questionStructure = {
   question: "",
@@ -34,6 +35,7 @@ const QuizCreator = () => {
     message: "",
     type: "",
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadQuizData = async () => {
@@ -196,14 +198,14 @@ const QuizCreator = () => {
     if (id !== "new") {
       const response = await patchQuiz(quizData);
       if (response.ok) {
-        setSnackbar({ open: true, message: response.message, type: "success" });
+        navigate("/");
       } else {
         setSnackbar({ open: true, message: response.message, type: "error" });
       }
     } else {
       const response = await postQuiz(quizData, currentUser);
       if (response.ok) {
-        setSnackbar({ open: true, message: response.message, type: "success" });
+        navigate("/");
       } else {
         setSnackbar({ open: true, message: response.message, type: "error" });
       }
