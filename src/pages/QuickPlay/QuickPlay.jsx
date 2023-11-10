@@ -10,6 +10,7 @@ import { editUserProfile } from "../../utils/firebase/firebase.utils";
 import { UserContext } from "../../contexts/userContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { postQuiz } from "../../services/fetchQuiz";
+import SnackBar from "../../components/SnackBar/SnackBar";
 
 const timeOut = 20;
 
@@ -31,6 +32,11 @@ const QuickPlay = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
   //timer countdown
   useEffect(() => {
@@ -110,10 +116,10 @@ const QuickPlay = () => {
     event.preventDefault();
     const response = await postQuiz(actualQuiz, currentUser, title);
     if (response.ok) {
-      alert(response.message);
+      setSnackbar({ open: true, message: response.message, type: "success" });
       navigate("/");
     } else {
-      alert(response.message);
+      setSnackbar({ open: true, message: response.message, type: "error" });
     }
   };
 
@@ -186,6 +192,10 @@ const QuickPlay = () => {
         <div className="main pt-5">
           <div className="text-center content mt-4">
             <div className="container">
+              <SnackBar
+                {...snackbar}
+                setOpen={() => setSnackbar({ ...snackbar, open: false })}
+              />
               <div className="timer-score mb-4">
                 <div>
                   {isGameOver ? (

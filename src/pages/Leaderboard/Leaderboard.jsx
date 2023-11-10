@@ -5,10 +5,16 @@ import "./Leaderboard.css";
 import { getAllUsersDocuments } from "../../utils/firebase/firebase.utils";
 import { useEffect, useState } from "react";
 import Loading from "../../components/Loading/Loading";
+import SnackBar from "../../components/SnackBar/SnackBar";
 
 const Leaderboard = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [usersInfo, setUsersInfo] = useState([])
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        type: "",
+      });
 
     useEffect(() => {
         const loadUsers = async () => {
@@ -16,7 +22,7 @@ const Leaderboard = () => {
             if (response.ok) {
                 setUsersInfo(response.data)
             } else {
-                alert(response.message)
+                setSnackbar({ open: true, message: response.message, type: "error" });
             }
             setIsLoading(false)
         }
@@ -31,6 +37,10 @@ const Leaderboard = () => {
     return (
         <div className="main">
             <Navbar />
+            <SnackBar
+              {...snackbar}
+              setOpen={() => setSnackbar({ ...snackbar, open: false })}
+            />
             <div className="container my-5 content">
                 <h1 className="about-title mb-4 text-center">Leaderboard</h1>
                 <div className="container text-center w-75 lead mb-5">

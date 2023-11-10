@@ -9,6 +9,7 @@ import "./SignIn.css";
 import googleLogo from "../../assets/google-icon.svg";
 import facebookLogo from "../../assets/facebook-icon.svg";
 import githubLogo from "../../assets/github-icon.svg";
+import SnackBar from "../SnackBar/SnackBar";
 
 const defaultFormFields = {
   email: "",
@@ -17,25 +18,30 @@ const defaultFormFields = {
 
 const SignIn = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
   const logGoogleUser = async () => {
     const response = await signInWithCustomPopup("google");
     if (!response.ok) {
-      alert(response.message)
+      setSnackbar({ open: true, message: response.message, type: "error" });
     }
   };
 
   const logFacebookUser = async () => {
     const response = await signInWithCustomPopup("facebook");
     if (!response.ok) {
-      alert(response.message)
+      setSnackbar({ open: true, message: response.message, type: "error" });
     }
   };
 
   const logGithubUser = async () => {
     const response = await signInWithCustomPopup("github");
     if (!response.ok) {
-      alert(response.message)
+      setSnackbar({ open: true, message: response.message, type: "error" });
     }
   };
 
@@ -52,7 +58,7 @@ const SignIn = () => {
     } catch (error) {
       switch (error.code) {
         case "auth/invalid-login-credentials":
-          alert("Incorrect email or password");
+          setSnackbar({ open: true, message: "Incorrect email or password.", type: "error" });
           break;
         default:
           console.log("Login failed", error);
@@ -63,6 +69,10 @@ const SignIn = () => {
   return (
     <>
       <h1 className="sign-in-title mb-4">Sign in page</h1>
+      <SnackBar
+        {...snackbar}
+        setOpen={() => setSnackbar({ ...snackbar, open: false })}
+      />
       <div className="container">
         <div className="row">
           <button

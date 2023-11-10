@@ -12,6 +12,7 @@ import { UserContext } from "../../contexts/userContext";
 import Loading from "../../components/Loading/Loading";
 import PlayButton from "../../components/PlayButton/PlayButton";
 import LanguageSelect from "../../components/LanguageSelect/LanguageSelect";
+import SnackBar from "../../components/SnackBar/SnackBar";
 
 const QuestionsOptions = [
   { value: 5, label: "5" },
@@ -41,6 +42,11 @@ const RandomGameCreator = () => {
   const navigate = useNavigate();
   const { currentUser, loading } = useContext(UserContext);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
   const fetchQuestions = async (event, ranked) => {
     const language = selectedLanguage ? selectedLanguage.value : false;
@@ -59,7 +65,7 @@ const RandomGameCreator = () => {
           navigate("/quickplay?gametype=online");
         }
       } else {
-        alert(data.message);
+        setSnackbar({ open: true, message: data.message, type: "error" });
       }
     } else {
       setValidate(true);
@@ -82,6 +88,10 @@ const RandomGameCreator = () => {
         <div className="text-center text-light mb-4 game-setup-input-field-title">
           <h1>Game Setup</h1>
         </div>
+        <SnackBar
+          {...snackbar}
+          setOpen={() => setSnackbar({ ...snackbar, open: false })}
+        />
         <div className="p-3 container setup-input-field-container text-light">
           <div className="text-center">
             {validate ? (

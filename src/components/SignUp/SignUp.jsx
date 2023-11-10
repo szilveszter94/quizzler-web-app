@@ -7,6 +7,7 @@ import {
   checkDuplicatedDisplayNames,
 } from "../../utils/firebase/firebase.utils";
 import "./SignUp.css";
+import SnackBar from "../SnackBar/SnackBar";
 
 const defaultFormFields = {
   displayName: "",
@@ -18,6 +19,11 @@ const defaultFormFields = {
 const SignUp = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,19 +39,19 @@ const SignUp = () => {
             displayName,
           });
           if (userDocument) {
-            alert("Successfully signed up.");
+            setSnackbar({ open: true, message: "Successfully signed up.", type: "success" });
           }
         } else {
-          alert(response.message);
+          setSnackbar({ open: true, message: response.message, type: "error" });
         }
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
-          alert("Cannot create user, email already in use.");
+          setSnackbar({ open: true, message: "Cannot create user, email already in use.", type: "error" });
         }
         console.log("user creation encountered an error", error);
       }
     } else {
-      alert("passwords do not match");
+      setSnackbar({ open: true, message: "Passwords do not match.", type: "error" });
       return;
     }
   };
@@ -57,6 +63,10 @@ const SignUp = () => {
 
   return (
     <div>
+      <SnackBar
+        {...snackbar}
+        setOpen={() => setSnackbar({ ...snackbar, open: false })}
+      />
       <h1 className="sign-up-title mb-5">Don't have an account?</h1>
       <form className="sign-up-form p-4" onSubmit={handleSubmit}>
         <p className="mb-4 sign-up-subtitle">

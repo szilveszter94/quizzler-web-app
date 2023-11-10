@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../contexts/userContext";
 import LanguageSelect from "../../components/LanguageSelect/LanguageSelect";
+import SnackBar from "../../components/SnackBar/SnackBar";
 
 const QuizList = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -23,6 +24,11 @@ const QuizList = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +36,7 @@ const QuizList = () => {
       if (!response.error) {
         setQuizzes(response);
       } else {
-        alert(response.message);
+        setSnackbar({ open: true, message: response.message, type: "error" });
       }
     };
     fetchData();
@@ -44,7 +50,7 @@ const QuizList = () => {
       setActualQuiz(response);
       navigate("/quickplay?gametype=local");
     } else {
-      alert(response.message);
+      setSnackbar({ open: true, message: response.message, type: "error" });
     }
   };
 
@@ -56,11 +62,11 @@ const QuizList = () => {
     const id = quizObj._id;
     const response = await deleteQuiz(id);
     if (response.ok) {
-      alert(response.message);
+      setSnackbar({ open: true, message: response.message, type: "success" });
       const updatedQuizArray = [...quizzes].filter((quiz) => quiz._id !== id);
       setQuizzes(updatedQuizArray);
     } else {
-      alert(response.message);
+      setSnackbar({ open: true, message: response.message, type: "error" });
     }
   };
 
@@ -68,6 +74,10 @@ const QuizList = () => {
     <div className="main">
       <Navbar />
       <div className="content container text-center">
+        <SnackBar
+          {...snackbar}
+          setOpen={() => setSnackbar({ ...snackbar, open: false })}
+        />
         <div className="row mt-5 text-center">
           <div className="col-md-4"></div>
           <h2 className="display-4 quiz-list-title col-md-4">Your quizzes</h2>

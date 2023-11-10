@@ -2,12 +2,13 @@
 import { useState, useEffect, useContext } from "react";
 import { postQuiz, patchQuiz } from "../../services/fetchQuiz";
 import QuizForm from "../../components/QuizForm/QuizForm";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import { fethQuizById } from "../../services/fetchQuiz";
 import Loading from "../../components/Loading/Loading";
 import { UserContext } from "../../contexts/userContext";
+import SnackBar from "../../components/SnackBar/SnackBar";
 
 const questionStructure = {
   question: "",
@@ -26,9 +27,13 @@ const QuizCreator = () => {
     questions: [questionStructure],
   });
   const [loading, setLoading] = useState(true);
-  const {currentUser} = useContext(UserContext)
+  const { currentUser } = useContext(UserContext);
   const { id } = useParams();
-  const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
   useEffect(() => {
     const loadQuizData = async () => {
@@ -37,7 +42,7 @@ const QuizCreator = () => {
         if (!response.error) {
           setQuizData(response);
         } else {
-          alert(response.message);
+          setSnackbar({ open: true, message: response.message, type: "error" });
         }
       } else {
         setQuizData({
@@ -191,18 +196,16 @@ const QuizCreator = () => {
     if (id !== "new") {
       const response = await patchQuiz(quizData);
       if (response.ok) {
-        alert(response.message);
-        navigate("/");
+        setSnackbar({ open: true, message: response.message, type: "success" });
       } else {
-        alert(response.message);
+        setSnackbar({ open: true, message: response.message, type: "error" });
       }
     } else {
       const response = await postQuiz(quizData, currentUser);
       if (response.ok) {
-        alert(response.message);
-        navigate("/");
+        setSnackbar({ open: true, message: response.message, type: "success" });
       } else {
-        alert(response.message);
+        setSnackbar({ open: true, message: response.message, type: "error" });
       }
     }
   };
@@ -215,6 +218,10 @@ const QuizCreator = () => {
         <div className="main">
           <Navbar />
           <div className="content quiz-creator-content">
+            <SnackBar
+              {...snackbar}
+              setOpen={() => setSnackbar({ ...snackbar, open: false })}
+            />
             <QuizForm
               handleSubmit={handleSubmit}
               quizData={quizData}

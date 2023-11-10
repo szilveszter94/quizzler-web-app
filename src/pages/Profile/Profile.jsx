@@ -20,6 +20,7 @@ import rank3 from "../../assets/ranks/rank3.png";
 import rank4 from "../../assets/ranks/rank4.png";
 import rank5 from "../../assets/ranks/rank5.png";
 import rank6 from "../../assets/ranks/rank6.png";
+import SnackBar from "../../components/SnackBar/SnackBar";
 
 const Profile = () => {
   const { currentUser } = useContext(UserContext);
@@ -29,6 +30,11 @@ const Profile = () => {
   const [color, setColor] = useState("rgb(255, 255, 255)");
   const [edit, setEdit] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
 
   const getUserInfo = async () => {
     try {
@@ -51,7 +57,7 @@ const Profile = () => {
       setPercentage(rating);
       setLoading(false);
     } catch (error) {
-      alert("Profile not loaded.");
+      setSnackbar({ open: true, message: "Profile not loaded.", type: "error" });
     }
   };
 
@@ -69,9 +75,9 @@ const Profile = () => {
           profile: { ...userInfo.profile, photoURL: response.photoUrl },
         });
         setImageError(false);
-        alert(response.message);
+        setSnackbar({ open: true, message: response.message, type: "success" });
       } else {
-        alert(response.message);
+        setSnackbar({ open: true, message: response.message, type: "error" });
       }
     }
   };
@@ -88,13 +94,13 @@ const Profile = () => {
     if (checkDuplicated.ok) {
       const response = await changeUserInfo(userInfo);
       if (response.ok) {
-        alert(response.message);
+        setSnackbar({ open: true, message: response.message, type: "success" });
         setEdit(false);
       } else {
-        alert(response.message);
+        setSnackbar({ open: true, message: response.message, type: "error" });
       }
     } else {
-      alert(checkDuplicated.message);
+      setSnackbar({ open: true, message: checkDuplicated.message, type: "error" });
     }
   };
 
@@ -129,6 +135,10 @@ const Profile = () => {
         <div className="main">
           <Navbar />
           <div className="content">
+            <SnackBar
+              {...snackbar}
+              setOpen={() => setSnackbar({ ...snackbar, open: false })}
+            />
             <div className="profile-page container text-center mt-5">
               <div className="profile-card">
                 <div className="edit-container">
@@ -153,7 +163,13 @@ const Profile = () => {
                   </div>
                   <div className="image-container col-md-4">
                     <img
-                      src={userInfo.profile.photoURL ? imageError ? photoImg : userInfo.profile.photoURL : photoImg}
+                      src={
+                        userInfo.profile.photoURL
+                          ? imageError
+                            ? photoImg
+                            : userInfo.profile.photoURL
+                          : photoImg
+                      }
                       alt="User Avatar"
                       onError={() => setImageError(true)}
                       className="profile-image"
