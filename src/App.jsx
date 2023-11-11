@@ -11,6 +11,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import Forbidden from "./components/Forbidden/Forbidden";
 import Profile from "./pages/Profile/Profile";
 import Leaderboard from "./pages/Leaderboard/Leaderboard";
+import PasswordReset from "./pages/PasswordReset/PasswordReset";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           }/>
         <Route path="authentication" element={<Authentication />} />
         <Route path="*" element={<Forbidden />} />
+        <Route path="forgot-password" element={<PasswordReset />} />
       </Routes>
     </>
   );

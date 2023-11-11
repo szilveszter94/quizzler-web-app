@@ -12,6 +12,7 @@ import githubLogo from "../../assets/github-icon.svg";
 import SnackBar from "../SnackBar/SnackBar";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
+import { Link } from "react-router-dom";
 
 const defaultFormFields = {
   email: "",
@@ -129,6 +130,9 @@ const SignIn = () => {
           onChange={handleChange}
           value={formFields.password}
         />
+        <div className="text-end mt-1">
+          <Link to="/forgot-password" className="forgot-password-link">Forgot password?</Link>
+        </div>
         <button className="btn mt-4 btn-lg btn-outline-info" type="submit">
           Sign In
         </button>

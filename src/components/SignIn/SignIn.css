@@ -19,3 +19,8 @@
   .sign-in-subtitle {
     font-family: "Righteous", sans-serif;
   }
+
+  .forgot-password-link {
+    text-decoration: none;
+    font-size: large;
+  }

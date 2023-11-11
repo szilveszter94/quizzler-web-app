@@ -11,6 +11,9 @@ import {
   signOut,
   onAuthStateChanged,
   sendEmailVerification,
+  sendPasswordResetEmail,
+  confirmPasswordReset,
+  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
 import {
@@ -35,6 +38,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth();
+export const db = getFirestore();
+const storage = getStorage(app);
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({
@@ -50,8 +56,6 @@ const githubProvider = new GithubAuthProvider();
 githubProvider.setCustomParameters({
   prompt: "select_account",
 });
-
-export const auth = getAuth();
 
 export const signInWithCustomPopup = async (type) => {
   const provider =
@@ -81,8 +85,35 @@ export const signInWithCustomPopup = async (type) => {
   }
 };
 
-export const db = getFirestore();
-const storage = getStorage(app);
+export const checkIfEmailExists = async (email) => {
+  try {
+    const collectionRef = collection(db, "users");
+    const usersQuery = query(collectionRef, where("email", "==", email));
+    const usersSnapshot = await getDocs(usersQuery);
+    if (usersSnapshot.empty) {
+      return {
+        ok: false,
+        message:
+          "Account not found with this email, try again with your correct email address.",
+      };
+    } else {
+      return {
+        ok: true,
+        message: "Password reset sent to your email address.",
+      };
+    }
+  } catch (error) {
+    return { ok: false, message: "Internal server error." };
+  }
+};
+
+export const passwordReset = async (email) => {
+  try {
+    return await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    return false;
+  }
+};
 
 export const uploadPhoto = async (file, user) => {
   const storageRef = ref(storage, "profile-photos/" + `${user.uid}.jpg`);
@@ -152,7 +183,11 @@ export const checkDuplicatedDisplayNames = async (displayName) => {
     if (usersSnapshot.empty) {
       return { data: [], ok: true }; // No users found with the given displayName.
     } else {
-      return {ok: false, message: "User with this nickname already exists. Try to choose an unique nickname."}
+      return {
+        ok: false,
+        message:
+          "User with this nickname already exists. Try to choose an unique nickname.",
+      };
     }
   } catch (error) {
     return { ok: false, message: "Internal server error." };
@@ -210,7 +245,9 @@ const generateUniqueDisplayName = async (displayName) => {
   let suffix = 0;
   let uniqueDisplayName = displayName;
   while (duplicated) {
-    const isDuplicatedDisplayName = await checkDuplicatedDisplayNames(uniqueDisplayName);
+    const isDuplicatedDisplayName = await checkDuplicatedDisplayNames(
+      uniqueDisplayName
+    );
     if (isDuplicatedDisplayName.ok) {
       return uniqueDisplayName;
     } else {
@@ -218,7 +255,7 @@ const generateUniqueDisplayName = async (displayName) => {
       uniqueDisplayName = `${uniqueDisplayName}${suffix}`;
     }
   }
-}
+};
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
   const userDocRef = doc(db, "users", userAuth.uid);
