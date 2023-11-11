@@ -16,7 +16,9 @@ const About = () => {
     <div className="main">
       <Navbar />
       <div className="container my-5 content">
+        <div className="container text-center">
         <h1 className="about-title mb-4">About Quizzler</h1>
+        </div>
         <p>
           Quizzler is your go-to platform for testing your knowledge with fun
           and challenging quizzes, featuring a competitive ranked mode.

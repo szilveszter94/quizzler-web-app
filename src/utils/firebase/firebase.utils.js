@@ -202,6 +202,7 @@ export const getAllUsersDocuments = async () => {
       acc.push({
         displayName: displayName,
         points: profile.points,
+        photoURL: profile.photoURL
       });
       return acc;
     }, []);
