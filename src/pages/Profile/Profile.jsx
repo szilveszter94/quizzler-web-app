@@ -24,6 +24,7 @@ import SnackBar from "../../components/SnackBar/SnackBar";
 
 const Profile = () => {
   const { currentUser } = useContext(UserContext);
+  const [originalDisplayName, setOriginalDisplayName] = useState(false);
   const [userInfo, setUserInfo] = useState(false);
   const [loading, setLoading] = useState(true);
   const [percentage, setPercentage] = useState(0);
@@ -40,6 +41,7 @@ const Profile = () => {
     try {
       const data = await getUserProfileData(currentUser);
       setUserInfo(data);
+      setOriginalDisplayName(data.displayName);
       const { profile } = data;
       const rating = (
         (profile.good_answers * 100) /
@@ -92,23 +94,37 @@ const Profile = () => {
   };
 
   const handleSubmit = async () => {
-    const checkDuplicated = await checkDuplicatedDisplayNames(
-      userInfo.displayName
-    );
-    if (checkDuplicated.ok) {
-      const response = await changeUserInfo(userInfo);
-      if (response.ok) {
-        setSnackbar({ open: true, message: response.message, type: "success" });
-        setEdit(false);
+    if (originalDisplayName !== userInfo.displayName) {
+      const checkDuplicated = await checkDuplicatedDisplayNames(
+        userInfo.displayName
+      );
+      if (checkDuplicated.ok) {
+        const response = await changeUserInfo(userInfo);
+        if (response.ok) {
+          setSnackbar({
+            open: true,
+            message: response.message,
+            type: "success",
+          });
+          setEdit(false);
+          setOriginalDisplayName(userInfo.displayName)
+        } else {
+          setSnackbar({ open: true, message: response.message, type: "error" });
+        }
       } else {
-        setSnackbar({ open: true, message: response.message, type: "error" });
+        setSnackbar({
+          open: true,
+          message: checkDuplicated.message,
+          type: "error",
+        });
       }
     } else {
       setSnackbar({
         open: true,
-        message: checkDuplicated.message,
-        type: "error",
+        message: "Profile uploaded successfully.",
+        type: "success",
       });
+      setEdit(false);
     }
   };
 
