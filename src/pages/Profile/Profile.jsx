@@ -93,6 +93,11 @@ const Profile = () => {
     setUserInfo({ ...userInfo, displayName: newName });
   };
 
+  const handleCancel = () => {
+    setEdit(false);
+    setUserInfo({ ...userInfo, displayName: originalDisplayName });
+  };
+
   const handleSubmit = async () => {
     if (originalDisplayName !== userInfo.displayName) {
       const checkDuplicated = await checkDuplicatedDisplayNames(
@@ -107,7 +112,7 @@ const Profile = () => {
             type: "success",
           });
           setEdit(false);
-          setOriginalDisplayName(userInfo.displayName)
+          setOriginalDisplayName(userInfo.displayName);
         } else {
           setSnackbar({ open: true, message: response.message, type: "error" });
         }
@@ -232,10 +237,10 @@ const Profile = () => {
                   </div>
                 </div>
                 {edit ? (
-                  <div className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center mb-4">
                     <input
                       onChange={handleEdit}
-                      className="form-control w-50"
+                      className="form-control w-25"
                       value={userInfo.displayName}
                     />
                     <button
@@ -243,6 +248,12 @@ const Profile = () => {
                       className="btn btn-outline-success ms-1"
                     >
                       Save
+                    </button>
+                    <button
+                      onClick={handleCancel}
+                      className="btn btn-sm btn-outline-info ms-1"
+                    >
+                      Cancel
                     </button>
                   </div>
                 ) : (
