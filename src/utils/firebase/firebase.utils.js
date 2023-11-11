@@ -12,8 +12,6 @@ import {
   onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
-  confirmPasswordReset,
-  fetchSignInMethodsForEmail,
 } from "firebase/auth";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
 import {
