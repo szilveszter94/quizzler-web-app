@@ -10,6 +10,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendEmailVerification,
 } from "firebase/auth";
 import { ref, uploadBytes, getStorage, getDownloadURL } from "firebase/storage";
 import {
@@ -257,7 +258,9 @@ export const createUserDocumentWithEmailAndPassword = async (
   password
 ) => {
   if (!email || !password) return;
-  return await createUserWithEmailAndPassword(auth, email, password);
+  const userAuth = await createUserWithEmailAndPassword(auth, email, password);
+  await sendEmailVerification(auth.currentUser);
+  return userAuth;
 };
 
 export const emailPasswordSignIn = async ({ email, password }) => {

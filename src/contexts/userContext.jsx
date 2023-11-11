@@ -27,7 +27,11 @@ export const UserProvider = ({ children }) => {
           signOutUser();
         }
       }
-      setCurrentUser(user);
+      if (user === null || (user && user.emailVerified)){
+        setCurrentUser(user);
+      } else {
+        signOutUser();
+      }
       setLoading(false);
     });
     return unsubscribe;

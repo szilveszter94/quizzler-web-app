@@ -39,14 +39,15 @@ const SignUp = () => {
             displayName,
           });
           if (userDocument) {
-            setSnackbar({ open: true, message: "Successfully signed up.", type: "success" });
+            setFormFields(defaultFormFields);
+            setSnackbar({ open: true, message: "Email verification sent to your email account.", type: "info" });
           }
         } else {
           setSnackbar({ open: true, message: response.message, type: "error" });
         }
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
-          setSnackbar({ open: true, message: "Cannot create user, email already in use.", type: "error" });
+          setSnackbar({ open: true, message: "Cannot create user, email already in use. Try to login with your email.", type: "error" });
         }
         console.log("user creation encountered an error", error);
       }

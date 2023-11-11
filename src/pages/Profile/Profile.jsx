@@ -57,7 +57,11 @@ const Profile = () => {
       setPercentage(rating);
       setLoading(false);
     } catch (error) {
-      setSnackbar({ open: true, message: "Profile not loaded.", type: "error" });
+      setSnackbar({
+        open: true,
+        message: "Profile not loaded.",
+        type: "error",
+      });
     }
   };
 
@@ -100,7 +104,11 @@ const Profile = () => {
         setSnackbar({ open: true, message: response.message, type: "error" });
       }
     } else {
-      setSnackbar({ open: true, message: checkDuplicated.message, type: "error" });
+      setSnackbar({
+        open: true,
+        message: checkDuplicated.message,
+        type: "error",
+      });
     }
   };
 
@@ -141,7 +149,7 @@ const Profile = () => {
             />
             <div className="profile-page container text-center mt-5">
               <div className="profile-card">
-                <div className="edit-container">
+                <div className="edit-container text-start">
                   {edit ? (
                     ""
                   ) : (
@@ -225,26 +233,34 @@ const Profile = () => {
                   <h2 className="profile-name">{userInfo.displayName}</h2>
                 )}
                 <p className="profile-email">Email address: {userInfo.email}</p>
-                <div className="profile-stats">
-                  <div className="profile-stat">
-                    <h3>Quizzes Played</h3>
-                    <p>{userInfo.profile.quizzes_played}</p>
+                <div className="row">
+                  <div className="col-md-3 profile-stat">
+                    <div className="mx-2">
+                      <h3>Quizzes Played</h3>
+                      <p>{userInfo.profile.quizzes_played}</p>
+                    </div>
                   </div>
-                  <div className="profile-stat">
-                    <h3>Quizzes Completed</h3>
-                    <p>{userInfo.profile.quizzes_completed}</p>
+                  <div className="col-md-3 profile-stat">
+                    <div className="mx-2">
+                      <h3>Quizzes Completed</h3>
+                      <p>{userInfo.profile.quizzes_completed}</p>
+                    </div>
                   </div>
-                  <div className="profile-stat">
-                    <h3>Good Answers</h3>
-                    <p className="good-answers">
-                      {userInfo.profile.good_answers}
-                    </p>
+                  <div className="col-md-3 profile-stat">
+                    <div className="mx-2">
+                      <h3>Good Answers</h3>
+                      <p className="good-answers">
+                        {userInfo.profile.good_answers}
+                      </p>
+                    </div>
                   </div>
-                  <div className="profile-stat">
-                    <h3>False Answers</h3>
-                    <p className="bad-answers">
-                      {userInfo.profile.false_answers}
-                    </p>
+                  <div className="col-md-3 profile-stat">
+                    <div className="mx-2">
+                      <h3>False Answers</h3>
+                      <p className="bad-answers">
+                        {userInfo.profile.false_answers}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div>

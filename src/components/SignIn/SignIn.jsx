@@ -10,6 +10,8 @@ import googleLogo from "../../assets/google-icon.svg";
 import facebookLogo from "../../assets/facebook-icon.svg";
 import githubLogo from "../../assets/github-icon.svg";
 import SnackBar from "../SnackBar/SnackBar";
+import { useContext } from "react";
+import { UserContext } from "../../contexts/userContext";
 
 const defaultFormFields = {
   email: "",
@@ -23,6 +25,7 @@ const SignIn = () => {
     message: "",
     type: "",
   });
+  const {loading, currentUser} = useContext(UserContext);
 
   const logGoogleUser = async () => {
     const response = await signInWithCustomPopup("google");
@@ -55,6 +58,9 @@ const SignIn = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       await emailPasswordSignIn(formFields);
+      if (!currentUser) {
+        setSnackbar({ open: true, message: "Please verify your email and activate your account.", type: "error" });
+      }
     } catch (error) {
       switch (error.code) {
         case "auth/invalid-login-credentials":
