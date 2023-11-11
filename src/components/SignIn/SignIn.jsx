@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import {
   emailPasswordSignIn,
-  signInWithCustomPopup
+  signInWithCustomPopup,
 } from "../../utils/firebase/firebase.utils";
 import FormInput from "../FormInput/FormInput";
 import { useState } from "react";
@@ -26,7 +26,7 @@ const SignIn = () => {
     message: "",
     type: "",
   });
-  const {loading, currentUser} = useContext(UserContext);
+  const { loading, currentUser } = useContext(UserContext);
 
   const logGoogleUser = async () => {
     const response = await signInWithCustomPopup("google");
@@ -59,13 +59,23 @@ const SignIn = () => {
     try {
       // eslint-disable-next-line no-unused-vars
       await emailPasswordSignIn(formFields);
-      if (!currentUser) {
-        setSnackbar({ open: true, message: "Please verify your email and activate your account.", type: "error" });
-      }
+      setTimeout(() => {
+        if (!currentUser) {
+          setSnackbar({
+            open: true,
+            message: "Please verify your email and activate your account.",
+            type: "error",
+          });
+        }
+      }, 1000);
     } catch (error) {
       switch (error.code) {
         case "auth/invalid-login-credentials":
-          setSnackbar({ open: true, message: "Incorrect email or password.", type: "error" });
+          setSnackbar({
+            open: true,
+            message: "Incorrect email or password.",
+            type: "error",
+          });
           break;
         default:
           console.log("Login failed", error);
@@ -131,7 +141,9 @@ const SignIn = () => {
           value={formFields.password}
         />
         <div className="text-end mt-1">
-          <Link to="/forgot-password" className="forgot-password-link">Forgot password?</Link>
+          <Link to="/forgot-password" className="forgot-password-link">
+            Forgot password?
+          </Link>
         </div>
         <button className="btn mt-4 btn-lg btn-outline-info" type="submit">
           Sign In
