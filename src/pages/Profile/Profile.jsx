@@ -237,25 +237,29 @@ const Profile = () => {
                   </div>
                 </div>
                 {edit ? (
-                  <div className="d-flex justify-content-center mb-4">
-                    <input
-                      onChange={handleEdit}
-                      className="form-control w-25"
-                      value={userInfo.displayName}
-                    />
-                    <button
-                      onClick={handleSubmit}
-                      className="btn btn-outline-success ms-1"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      className="btn btn-sm btn-outline-info ms-1"
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <>
+                    <div className="d-flex justify-content-center mb-3">
+                      <input
+                        onChange={handleEdit}
+                        className="form-control w-50"
+                        value={userInfo.displayName}
+                      />
+                    </div>
+                    <div className="d-flex justify-content-center mb-2">
+                      <button
+                        onClick={handleSubmit}
+                        className="btn btn-outline-success mx-2"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="btn btn-sm btn-outline-info mx-2"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
                 ) : (
                   <h2 className="profile-name">{userInfo.displayName}</h2>
                 )}
