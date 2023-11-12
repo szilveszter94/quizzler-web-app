@@ -259,7 +259,6 @@ const generateUniqueDisplayName = async (displayName) => {
 export const createUserDocumentFromAuth = async (userAuth, additionalInfo) => {
   const userDocRef = doc(db, "users", userAuth.uid);
   const userSnapshot = await getDoc(userDocRef);
-
   if (!userSnapshot.exists()) {
     const photoURL = userAuth.photoURL ? userAuth.photoURL : null;
     const { email, displayName, uid } = userAuth;

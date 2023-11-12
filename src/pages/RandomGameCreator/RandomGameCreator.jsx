@@ -84,7 +84,7 @@ const RandomGameCreator = () => {
   return (
     <div className="main">
       <Navbar />
-      <div className="py-5 content">
+      <div className="py-5 content mx-5">
         <div className="text-center text-light mb-4 game-setup-input-field-title">
           <h1>Game Setup</h1>
         </div>
@@ -147,25 +147,25 @@ const RandomGameCreator = () => {
           </span>
           <br />
           <div className="text-center">
-            <div className="row my-3">
+            <div className="row my-3 mx-5">
               <div
                 className={
                   currentUser
-                    ? "col-md-6 align-items-center"
-                    : "col-md-12 align-items-center"
+                    ? "col-md-6 align-items-center mb-4"
+                    : "col-md-12 align-items-center mb-4"
                 }
                 onClick={(event) =>
                   fetchQuestions(event, currentUser ? true : false)
                 }
               >
-                <PlayButton color="primary">
+                <PlayButton color="primary" size={20}>
                   {currentUser ? "Ranked Play" : "Practice"}
                 </PlayButton>
               </div>
               {currentUser ? (
-                <div className="col-md-6">
+                <div className="col-md-6 mb-4">
                   <div onClick={fetchQuestions}>
-                    <PlayButton color="secondary">Practice</PlayButton>
+                    <PlayButton color="secondary" size={20}>Practice</PlayButton>
                   </div>
                 </div>
               ) : (

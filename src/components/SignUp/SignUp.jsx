@@ -36,7 +36,7 @@ const SignUp = () => {
             password
           );
           const userDocument = await createUserDocumentFromAuth(user, {
-            displayName,
+            displayName: displayName,
           });
           if (userDocument) {
             setFormFields(defaultFormFields);

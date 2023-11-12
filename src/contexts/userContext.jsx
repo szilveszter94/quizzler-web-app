@@ -21,13 +21,15 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener(async (user) => {
       if (user) {
-        const userDocRef = await createUserDocumentFromAuth(user);
-         if (!userDocRef) {
-          alert("Login failed, try again later.");
-          signOutUser();
-        }
+        setTimeout(async () => {
+          const userDocRef = await createUserDocumentFromAuth(user);
+          if (!userDocRef) {
+            alert("Login failed, try again later.");
+            signOutUser();
+          }
+        }, 2000);
       }
-      if (user === null || (user && user.emailVerified)){
+      if (user === null || (user && user.emailVerified)) {
         setCurrentUser(user);
       } else {
         signOutUser();
