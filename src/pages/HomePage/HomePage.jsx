@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Navbar from "../../components/Navbar/Navbar";
 import "./HomePage.css";
 import Footer from "../../components/Footer/Footer";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../contexts/userContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import Loading from "../../components/Loading/Loading";
 import PlayButton from "../../components/PlayButton/PlayButton";
 import SnackBar from "../../components/SnackBar/SnackBar";
@@ -12,6 +13,16 @@ import { SnackbarContext } from "../../contexts/snackBarContext";
 const HomePage = () => {
   const { currentUser, loading } = useContext(UserContext);
   const { snackbar, setSnackbar } = useContext(SnackbarContext);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSnackbar({
+        open: false,
+        message: "",
+        type: "",
+      });
+    }, 3000);
+  }, []);
 
   if (loading) {
     return <Loading />;
