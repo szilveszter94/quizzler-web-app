@@ -10,6 +10,7 @@ import Loading from "../../components/Loading/Loading";
 import { UserContext } from "../../contexts/userContext";
 import SnackBar from "../../components/SnackBar/SnackBar";
 import { useNavigate } from "react-router-dom";
+import { SnackbarContext } from "../../contexts/snackBarContext";
 
 const questionStructure = {
   question: "",
@@ -30,11 +31,12 @@ const QuizCreator = () => {
   const [loading, setLoading] = useState(true);
   const { currentUser } = useContext(UserContext);
   const { id } = useParams();
-  const [snackbar, setSnackbar] = useState({
+  const [localSnackbar, setLocalSnackbar] = useState({
     open: false,
     message: "",
     type: "",
   });
+  const { setSnackbar } = useContext(SnackbarContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,7 +46,11 @@ const QuizCreator = () => {
         if (!response.error) {
           setQuizData(response);
         } else {
-          setSnackbar({ open: true, message: response.message, type: "error" });
+          setLocalSnackbar({
+            open: true,
+            message: response.message,
+            type: "error",
+          });
         }
       } else {
         setQuizData({
@@ -198,16 +204,34 @@ const QuizCreator = () => {
     if (id !== "new") {
       const response = await patchQuiz(quizData);
       if (response.ok) {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          type: "success",
+        });
         navigate("/");
       } else {
-        setSnackbar({ open: true, message: response.message, type: "error" });
+        setLocalSnackbar({
+          open: true,
+          message: response.message,
+          type: "error",
+        });
       }
     } else {
       const response = await postQuiz(quizData, currentUser);
       if (response.ok) {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          type: "success",
+        });
         navigate("/");
       } else {
-        setSnackbar({ open: true, message: response.message, type: "error" });
+        setLocalSnackbar({
+          open: true,
+          message: response.message,
+          type: "error",
+        });
       }
     }
   };
@@ -221,8 +245,10 @@ const QuizCreator = () => {
           <Navbar />
           <div className="content quiz-creator-content">
             <SnackBar
-              {...snackbar}
-              setOpen={() => setSnackbar({ ...snackbar, open: false })}
+              {...localSnackbar}
+              setOpen={() =>
+                setLocalSnackbar({ ...localSnackbar, open: false })
+              }
             />
             <QuizForm
               handleSubmit={handleSubmit}

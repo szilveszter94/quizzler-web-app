@@ -8,36 +8,43 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/userContext";
 import { useNavigate } from "react-router-dom";
-
+import { SnackbarContext } from "../../contexts/snackBarContext";
 
 const Authentication = () => {
-  const {currentUser} = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
+  const { setSnackbar } = useContext(SnackbarContext);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (currentUser){
+    if (currentUser) {
+      setSnackbar({
+        open: true,
+        message: "Successfully logged in.",
+        type: "success",
+      });
       navigate("/");
     }
-  }, [currentUser])
+  }, [currentUser]);
 
   return (
     <div className="main">
       <Navbar />
       <div className="content">
         <div className="container">
-        <div className="row text-center my-5">
-          <div className="col-md-6">
-            <div className="mx-5">
-              <SignIn />
+          <div className="row text-center my-5">
+            <div className="col-md-6">
+              <div className="mx-5">
+                <SignIn />
+              </div>
             </div>
-          </div>
-          <div className="col-md-6">
-            <div className="mx-5">
-              <SignUp />
+            <div className="col-md-6">
+              <div className="mx-5">
+                <SignUp />
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
       <Footer />
     </div>

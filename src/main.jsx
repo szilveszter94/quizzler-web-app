@@ -7,13 +7,16 @@ import { ActualQuizProvider } from "./contexts/quizContext.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { UserProvider } from "./contexts/userContext.jsx";
+import { SnackbarProvider } from "./contexts/snackBarContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <UserProvider>
         <ActualQuizProvider>
-          <App />
+          <SnackbarProvider>
+            <App />
+          </SnackbarProvider>
         </ActualQuizProvider>
       </UserProvider>
     </BrowserRouter>

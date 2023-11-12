@@ -6,17 +6,25 @@ import { UserContext } from "../../contexts/userContext";
 import { useContext } from "react";
 import Loading from "../../components/Loading/Loading";
 import PlayButton from "../../components/PlayButton/PlayButton";
+import SnackBar from "../../components/SnackBar/SnackBar";
+import { SnackbarContext } from "../../contexts/snackBarContext";
 
 const HomePage = () => {
   const { currentUser, loading } = useContext(UserContext);
+  const { snackbar, setSnackbar } = useContext(SnackbarContext);
 
   if (loading) {
     return <Loading />;
   }
+
   return (
     <div className="main">
       <Navbar />
       <div className="content">
+        <SnackBar
+          {...snackbar}
+          setOpen={() => setSnackbar({ ...snackbar, open: false })}
+        />
         <div className="container home">
           <div className="row mt-5">
             <div className="col-12 text-center home">
