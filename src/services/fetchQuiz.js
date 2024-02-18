@@ -50,7 +50,7 @@ export const postQuiz = async (body, currentUser, newQuizTitle) => {
   }
   try {
     body.uid = currentUser.uid;
-    const response = await fetch("${baseUrl}/api/v2/quiz", {
+    const response = await fetch(`${baseUrl}/api/v2/quiz`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
