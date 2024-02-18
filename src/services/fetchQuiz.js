@@ -1,6 +1,6 @@
 import { decodeBase64 } from "../utils/decodeBase64";
 
-const baseUrl = "express-server-for-quizzler-git-main-szilveszter94.vercel.app";
+const baseUrl = "https://express-server-for-quizzler-git-main-szilveszter94.vercel.app";
 
 export const fetchAllQuizFromDb = async (currentUser) => {
   try {
